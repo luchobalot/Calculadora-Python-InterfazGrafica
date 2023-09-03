@@ -22,6 +22,29 @@ def obt_op(operator):
 def limpiar_display():
     display.delete(0, END)
     
+def undo():
+    display_estado = display.get()
+    if len(display_estado):
+        display_nuevo_estado = display_estado[:-1]
+        limpiar_display()
+        display.insert(0, display_nuevo_estado)
+        
+    else:
+        limpiar_display()
+        display.insert(0, 'Error.')
+        
+def calcular():
+    display_estado = display.get()
+    try:
+        expresion =  compile(display_estado, 'app.py', 'eval')
+        result = eval(expresion)
+        limpiar_display()
+        display.insert(0,result)
+    except:
+        limpiar_display()
+        display.insert(0,"error")
+        
+    
     
 # Botones numericos
 
@@ -52,7 +75,7 @@ Button(root, text="^2", command=lambda: obt_op("**2")).grid(row=3, column=5, sti
 Button(root, text="(", command=lambda: obt_op("(")).grid(row=4, column=4, sticky=W+E)
 Button(root, text=")", command=lambda: obt_op(")")).grid(row=4, column=5, sticky=W+E)
 
-Button(root, text="🡸").grid(row=2, column=4, sticky=W+E, columnspan=2)
-Button(root, text="=").grid(row=5, column=4, sticky=W+E, columnspan= 2)
+Button(root, text="🡸", command=lambda: undo()).grid(row=2, column=4, sticky=W+E, columnspan=2)
+Button(root, text="=", command= calcular()).grid(row=5, column=4, sticky=W+E, columnspan= 2)
 
 root.mainloop()
